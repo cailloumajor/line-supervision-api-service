@@ -1,0 +1,8 @@
+**/.devcontainer/
+**/.git/
+**/.vscode/
+**/.gitignore
+config_data/
+target/
+.dockerignore
+Dockerfile
