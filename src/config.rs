@@ -41,7 +41,15 @@ pub struct Config {
 
 impl Config {
     pub fn get() -> Result<Self> {
-        dotenv().context("failed to get environment variables from .env file")?;
+        dotenv()
+            .or_else(|e| {
+                if e.not_found() {
+                    Ok(PathBuf::new())
+                } else {
+                    Err(e)
+                }
+            })
+            .context("failed to get environment variables from .env file")?;
         let config = Config::init_from_env()
             .context("failed to get configuration from environment variables")?;
         Ok(config)
