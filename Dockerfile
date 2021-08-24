@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.3
 FROM debian:buster AS gosu
 
 # grab gosu for easy step-down from root
@@ -26,7 +27,9 @@ WORKDIR /usr/src/app
 
 COPY Cargo.lock Cargo.toml ./
 COPY src ./src
-RUN cargo install --locked --path .
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/src/app/target \
+    cargo install --locked --path .
 
 
 FROM debian:buster-slim AS final
