@@ -26,7 +26,7 @@ WORKDIR /usr/src/app
 
 COPY Cargo.lock Cargo.toml ./
 COPY src ./src
-RUN cargo install --path .
+RUN cargo install --locked --path .
 
 
 FROM debian:buster-slim AS final
