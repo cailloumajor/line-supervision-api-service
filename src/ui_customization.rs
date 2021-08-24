@@ -51,9 +51,9 @@ pub fn get_ui_customization(config: &Config) -> Result<String> {
     let toml_file = &config.ui_customization_file;
     let raw_toml = fs::read_to_string(toml_file)
         .with_context(|| format!("failed reading {}", toml_file.display()))?;
-    let ui_config = toml_to_json(&raw_toml)
+    let ui_customization = toml_to_json(&raw_toml)
         .with_context(|| format!("failed to convert {} to JSON", toml_file.display()))?;
-    Ok(ui_config)
+    Ok(ui_customization)
 }
 
 #[cfg(test)]
