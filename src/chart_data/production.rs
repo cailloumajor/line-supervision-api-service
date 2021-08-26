@@ -51,11 +51,11 @@ impl ChartHandler for Handler {
             let now = Local::now();
             let first_shift_end = now.date().and_time(NaiveTime::from_hms(5, 30, 0)).unwrap();
             let shift_duration = Duration::hours(8);
-            let start = (0..=3)
+            let shift_end = (0..=3)
                 .map(|i| first_shift_end + shift_duration * i)
-                .find(|shift_end| now < *shift_end)
+                .find(|&shift_end| now < shift_end)
                 .unwrap();
-            start - shift_duration
+            shift_end - shift_duration
         };
         let total_function = self
             .query_data
