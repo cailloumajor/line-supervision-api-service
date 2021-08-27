@@ -5,6 +5,8 @@ use chrono::{DateTime, SecondsFormat, TimeZone, Utc};
 use indexmap::IndexMap;
 use regex::Regex;
 
+pub type FluxParams = HashMap<&'static str, FluxValue>;
+
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum Comparable {
     String(String),
@@ -112,11 +114,7 @@ impl QueryBuilder {
         QueryBuilder { re }
     }
 
-    pub(super) fn generate_query(
-        &self,
-        template: &str,
-        params: HashMap<&str, FluxValue>,
-    ) -> Result<String> {
+    pub(super) fn generate_query(&self, template: &str, params: FluxParams) -> Result<String> {
         // filter out lines defining placeholders variables
         let source = template
             .lines()

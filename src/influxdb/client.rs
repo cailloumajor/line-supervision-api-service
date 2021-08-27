@@ -1,10 +1,10 @@
-use std::{collections::HashMap, sync::Arc};
+use std::sync::Arc;
 
 use anyhow::{anyhow, Result};
 use serde::{Deserialize, Serialize};
 use surf::{Client as HttpClient, Response, Result as HttpResult};
 
-use super::flux_query::{FluxValue, QueryBuilder};
+use super::flux_query::{FluxParams, QueryBuilder};
 use crate::config::Config;
 
 #[derive(Serialize)]
@@ -46,7 +46,7 @@ impl Client {
     pub async fn flux_query(
         &self,
         template: &'static str,
-        mut params: HashMap<&'static str, FluxValue>,
+        mut params: FluxParams,
     ) -> Result<Response> {
         params.insert("bucket", self.bucket.to_string().into());
         let flux = self.query_builder.generate_query(template, params).unwrap();

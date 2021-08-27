@@ -1,4 +1,4 @@
-use std::{collections::HashMap, str::FromStr};
+use std::str::FromStr;
 
 use anyhow::anyhow;
 use async_trait::async_trait;
@@ -7,7 +7,7 @@ use futures::{StreamExt, TryFuture, TryStreamExt};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
-use crate::influxdb::FluxValue;
+use crate::influxdb::FluxParams;
 use crate::AppState;
 
 mod machine_state;
@@ -16,7 +16,6 @@ mod production;
 type BodyResult = tide::Result<tide::Body>;
 type ClientRequest = tide::Request<AppState>;
 type CsvDeserializer = AsyncDeserializer<surf::Response>;
-type FluxParams = HashMap<&'static str, FluxValue>;
 
 #[async_trait]
 trait ChartHandler {
