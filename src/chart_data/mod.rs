@@ -23,7 +23,6 @@ trait ChartHandler {
     async fn body(&self, deserializer: CsvDeserializer) -> BodyResult;
 }
 
-#[derive(Debug)]
 enum Chart {
     MachinesState,
     Production,
