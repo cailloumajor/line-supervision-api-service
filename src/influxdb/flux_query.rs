@@ -2,7 +2,6 @@ use std::collections::HashMap;
 
 use anyhow::{Context, Result};
 use chrono::{DateTime, SecondsFormat, TimeZone, Utc};
-use indexmap::IndexMap;
 use regex::Regex;
 
 pub type FluxParams = HashMap<&'static str, FluxValue>;
@@ -41,33 +40,12 @@ where
 #[derive(Debug)]
 pub enum FluxValue {
     Comparable(Comparable),
-    Array(Vec<FluxValue>),
-    Dictionary(IndexMap<Comparable, FluxValue>),
-    RawExpression(String),
 }
 
 impl FluxValue {
     fn to_flux_repr(&self) -> String {
         match self {
             Self::Comparable(comp) => comp.to_flux_repr(),
-            Self::Array(arr) => format!(
-                "[{}]",
-                arr.iter()
-                    .map(|e| e.to_flux_repr())
-                    .collect::<Vec<_>>()
-                    .join(", ")
-            ),
-            Self::Dictionary(inner) => {
-                format!(
-                    "[{}]",
-                    inner
-                        .iter()
-                        .map(|(k, v)| format!("{}: {}", k.to_flux_repr(), v.to_flux_repr()))
-                        .collect::<Vec<_>>()
-                        .join(", ")
-                )
-            }
-            Self::RawExpression(s) => s.to_owned(),
         }
     }
 }
@@ -78,29 +56,6 @@ where
 {
     fn from(value: V) -> Self {
         Self::Comparable(value.into())
-    }
-}
-
-impl<V> From<Vec<V>> for FluxValue
-where
-    V: Into<FluxValue>,
-{
-    fn from(value: Vec<V>) -> Self {
-        Self::Array(value.into_iter().map(|v| v.into()).collect())
-    }
-}
-
-impl<K, V> From<IndexMap<K, V>> for FluxValue
-where
-    K: Into<Comparable>,
-    V: Into<FluxValue>,
-{
-    fn from(value: IndexMap<K, V>) -> Self {
-        let inner = value
-            .into_iter()
-            .map(|(k, v)| (k.into(), v.into()))
-            .collect();
-        Self::Dictionary(inner)
     }
 }
 
@@ -178,95 +133,11 @@ mod tests {
     }
 
     #[test]
-    fn flux_value_from_vec() {
-        let flux_value: FluxValue = vec![
-            vec!["a".to_string(), "b".to_string()],
-            vec!["c".to_string(), "d".to_string()],
-        ]
-        .into();
-        assert_matches!(flux_value, FluxValue::Array(arr) => {
-            assert_matches!(&arr[..], [FluxValue::Array(arr1), FluxValue::Array(arr2)] => {
-                assert_matches!((&arr1[..], &arr2[..]), (
-                    [
-                        FluxValue::Comparable(Comparable::String(a)),
-                        FluxValue::Comparable(Comparable::String(b))
-                    ],
-                    [
-                        FluxValue::Comparable(Comparable::String(c)),
-                        FluxValue::Comparable(Comparable::String(d))
-                    ]
-                ) => {
-                    assert_eq!(a, "a");
-                    assert_eq!(b, "b");
-                    assert_eq!(c, "c");
-                    assert_eq!(d, "d");
-                })
-            })
-        })
-    }
-
-    #[test]
-    fn flux_value_from_indexmap() {
-        let flux_value: FluxValue = vec![("key".to_string(), "value".to_string())]
-            .into_iter()
-            .collect::<IndexMap<_, _>>()
-            .into();
-        assert_matches!(flux_value, FluxValue::Dictionary(im) => {
-            assert_matches!(im.first(), Some((k, v)) => {
-                assert_matches!((k, v), (
-                    Comparable::String(key),
-                    FluxValue::Comparable(Comparable::String(value))
-                ) => {
-                    assert_eq!(key, "key");
-                    assert_eq!(value, "value");
-                })
-            })
-        })
-    }
-
-    #[test]
     fn flux_value_comparable_to_flux_repr() {
         let comparable = Comparable::String("string".to_string());
         let comp_repr = comparable.to_flux_repr();
         let value = FluxValue::Comparable(comparable);
         assert_eq!(value.to_flux_repr(), comp_repr)
-    }
-
-    #[test]
-    fn flux_value_array_to_flux_repr() {
-        let value = FluxValue::Array(vec![
-            FluxValue::Comparable(Comparable::String("val1".to_string())),
-            FluxValue::Comparable(Comparable::String("val2".to_string())),
-        ]);
-        assert_eq!(value.to_flux_repr(), r#"["val1", "val2"]"#)
-    }
-
-    #[test]
-    fn flux_value_dict_to_flux_repr() {
-        let mut dict = IndexMap::new();
-        dict.insert(
-            Comparable::String("key1".to_string()),
-            FluxValue::Comparable(Comparable::String("value1".to_string())),
-        );
-        dict.insert(
-            Comparable::String("key2".to_string()),
-            FluxValue::Array(vec![
-                FluxValue::Comparable(Comparable::String("value2.1".to_string())),
-                FluxValue::Comparable(Comparable::String("value2.2".to_string())),
-            ]),
-        );
-        let value = FluxValue::Dictionary(dict);
-        assert_eq!(
-            value.to_flux_repr(),
-            r#"["key1": "value1", "key2": ["value2.1", "value2.2"]]"#
-        )
-    }
-
-    #[test]
-    fn flux_value_raw_expression_to_flux_repr() {
-        const EXPRESSION: &str = r#"raw "quoted" expression"#;
-        let value = FluxValue::RawExpression(EXPRESSION.to_string());
-        assert_eq!(value.to_flux_repr(), EXPRESSION)
     }
 
     const TEMPLATE: &str = indoc! {r#"

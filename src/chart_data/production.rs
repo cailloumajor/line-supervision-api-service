@@ -3,11 +3,7 @@ use async_trait::async_trait;
 use chrono::{DateTime, Duration, FixedOffset, Local, NaiveTime};
 use serde::{Deserialize, Serialize};
 
-use crate::influxdb::FluxValue;
-
-use super::{
-    chart_data_body, BodyResult, ChartHandler, ClientRequest, CsvDeserializer, FluxParams,
-};
+use super::{handle, AddFluxParams, ChartHandler, ClientRequest};
 
 type ChartData = Vec<DataSerie>;
 
@@ -15,13 +11,6 @@ type ChartData = Vec<DataSerie>;
 struct DataSerie {
     name: String,
     data: Vec<(i64, u32)>,
-}
-
-#[derive(Deserialize)]
-struct QueryData {
-    // Array of machines indexes strings
-    machines: Vec<String>,
-    seed: ChartData,
 }
 
 #[derive(Deserialize)]
@@ -33,57 +22,57 @@ struct ResultRow {
     total: u32,
 }
 
-pub struct Handler {
-    query_data: QueryData,
+struct Handler {
+    create_time: DateTime<Local>,
+    start_time: DateTime<Local>,
 }
 
 impl Handler {
-    pub async fn from_request(request: &mut ClientRequest) -> tide::Result<Self> {
-        let query_data = request.body_json().await?;
-        Ok(Self { query_data })
+    pub fn new() -> Self {
+        let now = Local::now();
+        let first_shift_end = now.date().and_time(NaiveTime::from_hms(5, 30, 0)).unwrap();
+        let shift_duration = Duration::hours(8);
+        let shift_end = (0..=3)
+            .map(|i| first_shift_end + shift_duration * i)
+            .find(|&shift_end| now < shift_end)
+            .unwrap();
+        let start_time = shift_end - shift_duration;
+        Self {
+            create_time: now,
+            start_time,
+        }
     }
 }
 
 #[async_trait]
 impl ChartHandler for Handler {
-    fn set_params(&self, flux_params: &mut FluxParams) {
-        let start = {
-            let now = Local::now();
-            let first_shift_end = now.date().and_time(NaiveTime::from_hms(5, 30, 0)).unwrap();
-            let shift_duration = Duration::hours(8);
-            let shift_end = (0..=3)
-                .map(|i| first_shift_end + shift_duration * i)
-                .find(|&shift_end| now < shift_end)
-                .unwrap();
-            shift_end - shift_duration
-        };
-        let total_function = self
-            .query_data
-            .machines
-            .iter()
-            .map(|index| format!("r[\"{}\"]", index))
-            .collect::<Vec<_>>()
-            .join(" + ");
-        let total_function = format!("(r) => {}", total_function);
-        flux_params.extend([
-            ("machine_set", self.query_data.machines.to_owned().into()),
-            ("start", start.into()),
-            ("total_function", FluxValue::RawExpression(total_function)),
-        ]);
+    type ChartData = ChartData;
+    type ResultRow = ResultRow;
+
+    fn time_bounds(&self) -> (String, String) {
+        (
+            self.start_time.timestamp_millis().to_string(),
+            self.create_time.timestamp_millis().to_string(),
+        )
     }
 
-    async fn body(&self, deserializer: CsvDeserializer) -> BodyResult {
-        chart_data_body(deserializer, self.query_data.seed.clone(), accumulate).await
+    fn flux_params(&self) -> AddFluxParams {
+        vec![("start", self.start_time.into())]
+    }
+
+    async fn accumulate(&self, mut acc: ChartData, row: ResultRow) -> tide::Result<ChartData> {
+        let serie = acc
+            .get_mut(0)
+            .ok_or_else(|| anyhow!("missing data serie in seed"))?;
+        let start_ms = row.start.timestamp_millis();
+        let stop_ms = row.stop.timestamp_millis();
+        serie.data.push((start_ms, row.total));
+        serie.data.push((stop_ms, row.total));
+        Ok(acc)
     }
 }
 
-async fn accumulate(mut acc: ChartData, row: ResultRow) -> tide::Result<ChartData> {
-    let serie = acc
-        .get_mut(0)
-        .ok_or_else(|| anyhow!("missing data serie in seed"))?;
-    let start_ms = row.start.timestamp_millis();
-    let stop_ms = row.stop.timestamp_millis();
-    serie.data.push((start_ms, row.total));
-    serie.data.push((stop_ms, row.total));
-    Ok(acc)
+pub async fn handler(req: ClientRequest) -> tide::Result {
+    let chart_handler = Handler::new();
+    handle(req, &chart_handler).await
 }

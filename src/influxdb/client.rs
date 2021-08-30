@@ -43,9 +43,9 @@ impl Client {
         self.client.get("ready").send().await
     }
 
-    pub async fn flux_query(
-        &self,
-        template: &'static str,
+    pub async fn flux_query<'a>(
+        &'a self,
+        template: &'a str,
         mut params: FluxParams,
     ) -> Result<Response> {
         params.insert("bucket", self.bucket.to_string().into());
