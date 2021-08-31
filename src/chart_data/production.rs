@@ -23,8 +23,8 @@ struct ResultRow {
 }
 
 struct Handler {
-    create_time: DateTime<Local>,
     start_time: DateTime<Local>,
+    end_time: DateTime<Local>,
 }
 
 impl Handler {
@@ -32,14 +32,14 @@ impl Handler {
         let now = Local::now();
         let first_shift_end = now.date().and_time(NaiveTime::from_hms(5, 30, 0)).unwrap();
         let shift_duration = Duration::hours(8);
-        let shift_end = (0..=3)
+        let end_time = (0..=3)
             .map(|i| first_shift_end + shift_duration * i)
             .find(|&shift_end| now < shift_end)
             .unwrap();
-        let start_time = shift_end - shift_duration;
+        let start_time = end_time - shift_duration;
         Self {
-            create_time: now,
             start_time,
+            end_time,
         }
     }
 }
@@ -52,7 +52,7 @@ impl ChartHandler for Handler {
     fn time_bounds(&self) -> (String, String) {
         (
             self.start_time.timestamp_millis().to_string(),
-            self.create_time.timestamp_millis().to_string(),
+            self.end_time.timestamp_millis().to_string(),
         )
     }
 
