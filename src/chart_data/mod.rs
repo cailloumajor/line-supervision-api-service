@@ -32,6 +32,7 @@ trait ChartHandler {
 }
 
 #[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct CommonQueryData<T> {
     flux_template: String,
     seed: T,
