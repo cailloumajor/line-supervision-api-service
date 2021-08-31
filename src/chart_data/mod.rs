@@ -83,5 +83,6 @@ where
             chart_handler.accumulate(acc, row).await
         })
         .await?;
-    Ok(tide::Body::from_json(&chart_data)?.into())
+    response.set_body(tide::Body::from_json(&chart_data)?);
+    Ok(response)
 }
