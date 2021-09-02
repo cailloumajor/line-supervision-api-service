@@ -34,7 +34,6 @@ name = "Machine 1"
 path = "M 100 100 h 800 v 800 h -800 Z"
 tag_pos = { x = 500, y = 200 }
 card_pos = { x = 500, y = 500 }
-campaign = true
 production = true
 state_chart = true
 
@@ -44,7 +43,6 @@ path = "M 1100 100 h 800 v 800 h -800 Z"
 tag_pos = { x = 1500, y = 200 }
 card_pos = { x = 1500, y = 500 }
 campaign = true
-production = true
 state_chart = true
 
 [[machines]]
@@ -54,4 +52,3 @@ tag_pos = { x = 2500, y = 200 }
 card_pos = { x = 2500, y = 500 }
 campaign = true
 production = true
-state_chart = true
