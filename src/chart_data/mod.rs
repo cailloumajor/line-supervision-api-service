@@ -23,6 +23,7 @@ trait ChartHandler {
     type ResultRow: DeserializeOwned;
 
     fn time_bounds(&self) -> (String, String);
+    fn flux_template(&self) -> &str;
     fn flux_params(&self) -> AddFluxParams;
     async fn accumulate(
         &self,
@@ -34,7 +35,6 @@ trait ChartHandler {
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct CommonQueryData<T> {
-    flux_template: String,
     seed: T,
 }
 
@@ -74,7 +74,7 @@ where
     let influxdb_res = req
         .state()
         .influxdb_client
-        .flux_query(&query_data.flux_template, flux_params)
+        .flux_query(chart_handler.flux_template(), flux_params)
         .await?;
     let chart_data = AsyncDeserializer::from_reader(influxdb_res)
         .deserialize()

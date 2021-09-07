@@ -10,7 +10,7 @@ pub struct UiCustomizationData {
     html_title: String,
     app_title: String,
     synoptics: Synoptics,
-    machines: Vec<Machine>,
+    pub machines: Vec<Machine>,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -28,17 +28,17 @@ struct Dimensions {
 
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all(serialize = "camelCase"))]
-struct Machine {
-    name: String,
+pub struct Machine {
+    pub name: String,
     path: String,
     tag_pos: Coordinates,
     card_pos: Coordinates,
     #[serde(default)]
     campaign: bool,
     #[serde(default)]
-    production: bool,
+    pub production: bool,
     #[serde(default)]
-    state_chart: bool,
+    pub state_chart: bool,
 }
 
 #[derive(Deserialize, Serialize)]

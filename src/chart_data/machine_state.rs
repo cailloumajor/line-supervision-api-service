@@ -1,14 +1,16 @@
 use anyhow::anyhow;
 use async_trait::async_trait;
 use chrono::{DateTime, Duration, FixedOffset, Utc};
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
 use super::{handle, AddFluxParams, ChartHandler, ClientRequest};
+use crate::ui_customization::UiCustomizationData;
 
 type ChartData = Vec<DataSerie>;
 
 #[derive(Clone, Deserialize, Serialize)]
-struct DataSerie {
+pub struct DataSerie {
     name: String,
     data: Vec<DataPoint>,
 }
@@ -20,7 +22,7 @@ struct DataPoint {
 }
 
 #[derive(Deserialize)]
-struct ResultRow {
+pub struct ResultRow {
     #[serde(rename(deserialize = "_time"))]
     time: DateTime<FixedOffset>,
     duration: i64,
@@ -28,7 +30,30 @@ struct ResultRow {
     state_index: usize,
 }
 
-struct Handler;
+pub struct Handler {
+    machine_set: Vec<String>,
+    machine_dict: IndexMap<String, String>,
+}
+
+impl Handler {
+    pub fn new(ui_customization: &UiCustomizationData) -> Self {
+        let machine_dict: IndexMap<_, _> = ui_customization
+            .machines
+            .iter()
+            .enumerate()
+            .filter_map(|(index, machine)| {
+                machine
+                    .state_chart
+                    .then(|| (index.to_string(), machine.name.to_owned()))
+            })
+            .collect();
+        let machine_set = machine_dict.keys().cloned().collect();
+        Self {
+            machine_set,
+            machine_dict,
+        }
+    }
+}
 
 #[async_trait]
 impl ChartHandler for Handler {
@@ -44,8 +69,15 @@ impl ChartHandler for Handler {
         )
     }
 
+    fn flux_template(&self) -> &str {
+        include_str!("machines_state.flux")
+    }
+
     fn flux_params(&self) -> AddFluxParams {
-        Vec::new()
+        vec![
+            ("machine_set", self.machine_set.clone().into()),
+            ("machine_dict", self.machine_dict.clone().into()),
+        ]
     }
 
     async fn accumulate(&self, mut acc: ChartData, row: ResultRow) -> tide::Result<ChartData> {
@@ -63,6 +95,6 @@ impl ChartHandler for Handler {
 }
 
 pub async fn handler(req: ClientRequest) -> tide::Result {
-    let chart_handler = Handler {};
-    handle(req, &chart_handler).await
+    let chart_handler = req.state().machine_state_chart.clone();
+    handle(req, &*chart_handler).await
 }

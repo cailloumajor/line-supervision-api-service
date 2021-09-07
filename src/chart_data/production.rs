@@ -1,20 +1,22 @@
 use anyhow::anyhow;
 use async_trait::async_trait;
-use chrono::{DateTime, Duration, FixedOffset, Local, NaiveTime};
+use chrono::{DateTime, Duration, FixedOffset, Local, NaiveTime, TimeZone};
 use serde::{Deserialize, Serialize};
 
 use super::{handle, AddFluxParams, ChartHandler, ClientRequest};
+use crate::influxdb::FluxValue::RawExpression;
+use crate::ui_customization::UiCustomizationData;
 
 type ChartData = Vec<DataSerie>;
 
 #[derive(Clone, Deserialize, Serialize)]
-struct DataSerie {
+pub struct DataSerie {
     name: String,
     data: Vec<(i64, u32)>,
 }
 
 #[derive(Deserialize)]
-struct ResultRow {
+pub struct ResultRow {
     #[serde(rename(deserialize = "_start"))]
     start: DateTime<FixedOffset>,
     #[serde(rename(deserialize = "_stop"))]
@@ -22,13 +24,39 @@ struct ResultRow {
     total: u32,
 }
 
-struct Handler {
+pub struct Handler {
     start_time: DateTime<Local>,
     end_time: DateTime<Local>,
+    machine_set: Vec<String>,
+    total_function: String,
 }
 
 impl Handler {
-    pub fn new() -> Self {
+    pub fn new(ui_customization: &UiCustomizationData) -> Self {
+        let epoch = Local.timestamp(0, 0);
+        let machine_set: Vec<_> = ui_customization
+            .machines
+            .iter()
+            .enumerate()
+            .filter_map(|(index, machine)| machine.production.then(|| index.to_string()))
+            .collect();
+        let total_function = format!(
+            "(r) => {}",
+            machine_set
+                .iter()
+                .map(|index| format!("r[\"{}\"]", index))
+                .collect::<Vec<_>>()
+                .join(" + ")
+        );
+        Self {
+            start_time: epoch,
+            end_time: epoch,
+            machine_set,
+            total_function,
+        }
+    }
+
+    fn update_time(&mut self) {
         let now = Local::now();
         let first_shift_end = now.date().and_time(NaiveTime::from_hms(5, 30, 0)).unwrap();
         let shift_duration = Duration::hours(8);
@@ -37,10 +65,8 @@ impl Handler {
             .find(|&shift_end| now < shift_end)
             .unwrap();
         let start_time = end_time - shift_duration;
-        Self {
-            start_time,
-            end_time,
-        }
+        self.start_time = start_time;
+        self.end_time = end_time;
     }
 }
 
@@ -56,8 +82,16 @@ impl ChartHandler for Handler {
         )
     }
 
+    fn flux_template(&self) -> &str {
+        include_str!("production.flux")
+    }
+
     fn flux_params(&self) -> AddFluxParams {
-        vec![("start", self.start_time.into())]
+        vec![
+            ("start", self.start_time.into()),
+            ("machine_set", self.machine_set.clone().into()),
+            ("total_function", RawExpression(self.total_function.clone())),
+        ]
     }
 
     async fn accumulate(&self, mut acc: ChartData, row: ResultRow) -> tide::Result<ChartData> {
@@ -73,6 +107,7 @@ impl ChartHandler for Handler {
 }
 
 pub async fn handler(req: ClientRequest) -> tide::Result {
-    let chart_handler = Handler::new();
-    handle(req, &chart_handler).await
+    let mut chart_handler = req.state().production_chart.lock_arc().await;
+    chart_handler.update_time();
+    handle(req, &*chart_handler).await
 }
