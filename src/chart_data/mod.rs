@@ -1,6 +1,3 @@
-use std::str::FromStr;
-
-use anyhow::anyhow;
 use async_trait::async_trait;
 use csv_async::AsyncDeserializer;
 use futures::{StreamExt, TryStreamExt};
@@ -36,26 +33,6 @@ trait ChartHandler {
 #[serde(rename_all = "camelCase")]
 struct CommonQueryData<T> {
     seed: T,
-}
-
-enum Chart {
-    MachinesState,
-    Production,
-}
-
-impl FromStr for Chart {
-    type Err = tide::Error;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "machines-state" => Ok(Self::MachinesState),
-            "production" => Ok(Self::Production),
-            _ => Err(tide::Error::new(
-                404,
-                anyhow!("unknown route parameter: {}", s),
-            )),
-        }
-    }
 }
 
 async fn handle<H, T>(mut req: ClientRequest, chart_handler: &H) -> tide::Result
