@@ -31,5 +31,5 @@ features = [ "std", "serde" ]
 [dev-dependencies]
 assert_matches = "1.5.0"
 indoc = "1.0.3"
-insta = "1.7.1"
+insta = "1.8.0"
 test-case = "1.2.0"
