@@ -1,8 +1,8 @@
+use std::convert::TryInto;
 use std::sync::Arc;
 
 use anyhow::{anyhow, Result};
 use serde::{Deserialize, Serialize};
-use surf::{Client as HttpClient, Response, Result as HttpResult};
 
 use super::flux_query::{FluxParams, QueryBuilder};
 use crate::config::Config;
@@ -23,13 +23,15 @@ pub struct Client {
     org: Arc<String>,
     bucket: Arc<String>,
     query_builder: Arc<QueryBuilder>,
-    client: HttpClient,
+    client: surf::Client,
 }
 
 impl Client {
     pub fn new(config: &Config) -> Self {
-        let mut http_client = HttpClient::new();
-        http_client.set_base_url(config.influxdb_base_url.to_owned().into());
+        let http_client = surf::Config::new()
+            .set_base_url(config.influxdb_base_url.to_owned().into())
+            .try_into()
+            .unwrap();
         Client {
             read_token: Arc::new(config.influxdb_read_token.to_owned()),
             org: Arc::new(config.influxdb_org.to_owned()),
@@ -39,7 +41,7 @@ impl Client {
         }
     }
 
-    pub async fn ready(&self) -> HttpResult {
+    pub async fn ready(&self) -> surf::Result {
         self.client.get("ready").send().await
     }
 
@@ -47,7 +49,7 @@ impl Client {
         &'a self,
         template: &'a str,
         mut params: FluxParams,
-    ) -> Result<Response> {
+    ) -> Result<surf::Response> {
         params.insert("bucket", self.bucket.to_string().into());
         let flux = self.query_builder.generate_query(template, params).unwrap();
         let mut influxdb_resp = self
