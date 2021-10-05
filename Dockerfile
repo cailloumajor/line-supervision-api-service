@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1.3
-FROM debian:buster AS gosu
+FROM debian:bullseye AS gosu
 
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
 # renovate: datasource=github-releases depName=tianon/gosu versioning=loose
-ENV GOSU_VERSION=1.12
+ENV GOSU_VERSION=1.14
 # hadolint ignore=DL3008,DL4006,SC2015,SC2086,SC2155
 RUN set -eux ; \
     apt-get update; \
@@ -32,7 +32,7 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
     cargo install --locked --path .
 
 
-FROM debian:buster-slim AS final
+FROM debian:bullseye-slim AS final
 
 WORKDIR /app
 
