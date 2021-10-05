@@ -21,7 +21,7 @@ RUN set -eux ; \
     gosu nobody true
 
 
-FROM rust:1.53.0 AS builder
+FROM rust:1.55.0 AS builder
 
 WORKDIR /usr/src/app
 
