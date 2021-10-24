@@ -1,0 +1,6 @@
+---
+source: src/ui_customization.rs
+expression: ui_customization.json
+
+---
+{"htmlTitle":"Line supervision","appTitle":"Production line","synoptics":{"viewbox":{"width":3000,"height":1000}},"machines":[{"name":"Machine 1","path":"M 100 100 h 800 v 800 h -800 Z","tagPos":{"x":500,"y":200},"cardPos":{"x":500,"y":500},"campaign":false,"production":true,"stateChart":true},{"name":"Machine 2","path":"M 1100 100 h 800 v 800 h -800 Z","tagPos":{"x":1500,"y":200},"cardPos":{"x":1500,"y":500},"campaign":true,"production":false,"stateChart":true},{"name":"Machine 3","path":"M 2100 100 h 800 v 800 h -800 Z","tagPos":{"x":2500,"y":200},"cardPos":{"x":2500,"y":500},"campaign":true,"production":true,"stateChart":false}]}

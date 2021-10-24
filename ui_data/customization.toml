@@ -1,0 +1,54 @@
+# Example UI customization file with documentation.
+
+# A String of the value of <title> tag.
+html_title = "Line supervision"
+
+# A String of application title (appears in application bar).
+app_title = "Production line"
+
+# A Table of configuration for the synoptics representation.
+[synoptics]
+# A Table with `width` and `height` keys, which values are Integers or Floats
+# of the dimensions of the SVG viewbox.
+viewbox = { width = 3000, height = 1000 }
+
+# Array of tables representing machines to display.
+# Allowed keys are:
+# name        - A String machine name.
+# campaign    - A Boolean indicating whether the campaign for this machine is
+#               to be shown (optional).
+# path        - A String of the SVG path for this machine to be represented on
+#               the synoptics.
+# tag_pos     - A Table with `x` and `y` keys, which values are Integers or
+#               Floats of the position of the name tag's center for this
+#               machine, in SVG user coordinate system.
+# card_pos    - A Table with `x` and `y` keys, which values are Integers or
+#               Floats of the position of the gauges card's center for this
+#               machine, in SVG user coordinate system.
+# production  - A Boolean indicating whether the machine is to appear in the
+#               production chart (optional).
+# state_chart - A Boolean indicating whether the machine is to appear in the
+#               state chart (optional).
+[[machines]]
+name = "Machine 1"
+path = "M 100 100 h 800 v 800 h -800 Z"
+tag_pos = { x = 500, y = 200 }
+card_pos = { x = 500, y = 500 }
+production = true
+state_chart = true
+
+[[machines]]
+name = "Machine 2"
+path = "M 1100 100 h 800 v 800 h -800 Z"
+tag_pos = { x = 1500, y = 200 }
+card_pos = { x = 1500, y = 500 }
+campaign = true
+state_chart = true
+
+[[machines]]
+name = "Machine 3"
+path = "M 2100 100 h 800 v 800 h -800 Z"
+tag_pos = { x = 2500, y = 200 }
+card_pos = { x = 2500, y = 500 }
+campaign = true
+production = true
