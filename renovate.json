@@ -9,6 +9,11 @@
       "matchDepTypes": ["dev-dependencies"],
       "automerge": true,
       "automergeType": "branch"
+    },
+    {
+      "matchPackageNames": ["rust"],
+      "matchManagers": ["dockerfile"],
+      "semanticCommitType": "fix"
     }
   ],
   "regexManagers": [
