@@ -32,4 +32,4 @@ features = [ "std", "serde" ]
 assert_matches = "1.5.0"
 indoc = "1.0.3"
 insta = "1.8.0"
-test-case = "1.2.0"
+test-case = "1.2.1"
