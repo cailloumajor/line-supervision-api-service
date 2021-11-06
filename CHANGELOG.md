@@ -1,5 +1,15 @@
 # Changelog
 
+### [1.1.1](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.1.0...v1.1.1) (2021-11-06)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate anyhow to 1.0.45 ([ab458cd](https://www.github.com/cailloumajor/line-supervision-api-service/commit/ab458cdd546ddec6a86f995d163f5f07b2ef1caf))
+* **deps:** update rust crate serde_json to 1.0.69 ([0bffff1](https://www.github.com/cailloumajor/line-supervision-api-service/commit/0bffff16858f8e9fb8dee7cf226b4f76c1c4a5a0))
+* **deps:** update rust crate surf to 2.3.2 ([18629aa](https://www.github.com/cailloumajor/line-supervision-api-service/commit/18629aa9b382a91476d9bbb104c528b27ce9caaa))
+* **deps:** update rust docker tag to v1.56.1 ([6dfdb6c](https://www.github.com/cailloumajor/line-supervision-api-service/commit/6dfdb6cc7bb8c55886a19c4203a608be52416601))
+
 ## [1.1.0](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.0.0...v1.1.0) (2021-10-25)
 
 
