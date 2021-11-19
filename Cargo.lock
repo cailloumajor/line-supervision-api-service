@@ -601,9 +601,9 @@ dependencies = [
 
 [[package]]
 name = "csv-async"
-version = "1.2.1"
+version = "1.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c851767e06693380318cacf205c815dfd5fdb83033e4dceebaae7ff1ed6bd9ad"
+checksum = "d72072931ebe0a6f5127359bd5cf3d4ab81e79616ed9d8c438db4dfa65ddbb77"
 dependencies = [
  "bstr",
  "cfg-if 1.0.0",
