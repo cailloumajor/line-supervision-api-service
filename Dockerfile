@@ -21,7 +21,7 @@ RUN set -eux ; \
     gosu nobody true
 
 
-FROM rust:1.56.1-bullseye AS builder
+FROM rust:1.57.0-bullseye AS builder
 
 WORKDIR /usr/src/app
 
