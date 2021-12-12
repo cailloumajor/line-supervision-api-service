@@ -1,8 +1,6 @@
-**/.devcontainer/
-**/.git/
-**/.vscode/
-**/.gitignore
-config_data/
-target/
-.dockerignore
-Dockerfile
+*
+
+!Cargo.lock
+!Cargo.toml
+!src/
+!docker-healthcheck.sh
