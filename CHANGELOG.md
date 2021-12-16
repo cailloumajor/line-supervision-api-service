@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.0](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.1.2...v1.2.0) (2021-12-16)
+
+
+### Features
+
+* add healthcheck binary ([802a731](https://www.github.com/cailloumajor/line-supervision-api-service/commit/802a7319dd38debe895a92a6aced68a3834f088b))
+* use distroless base image ([8edb63f](https://www.github.com/cailloumajor/line-supervision-api-service/commit/8edb63f23d20e4dbd8bfde16cc5206d82ee15b6e))
+
+
+### Bug Fixes
+
+* **deps:** update rust crate serde to 1.0.132 ([e21797b](https://www.github.com/cailloumajor/line-supervision-api-service/commit/e21797b52bb776afc42cab3c50c3269e80196459))
+* **deps:** update rust crate serde_json to 1.0.73 ([2c5709b](https://www.github.com/cailloumajor/line-supervision-api-service/commit/2c5709b18125a42ad15ccc5bec5e3674486e360b))
+* move to whitelist-style .dockerignore ([ba5dc9f](https://www.github.com/cailloumajor/line-supervision-api-service/commit/ba5dc9f277d5ff32106c961ba723fcd2cf206237))
+
 ### [1.1.2](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.1.1...v1.1.2) (2021-12-10)
 
 
