@@ -43,7 +43,7 @@ async fn main() -> tide::Result<()> {
     app.at("/health").get(handlers::health);
     app.at("/logo")
         .serve_file(&logo_file)
-        .with_context(|| format!("failed to serve {}", logo_file.display()))?;
+        .with_context(|| format!("logo file path error: {}", logo_file.display()))?;
     app.at("/ui-customization").get(handlers::ui_customization);
     app.at("/influxdb-ready").get(handlers::influxdb_ready);
     app.at("/chart-data/machines-state")
