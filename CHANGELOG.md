@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.2.0...v1.3.0) (2021-12-18)
+
+
+### Features
+
+* add explicit signals handling ([2fefa27](https://www.github.com/cailloumajor/line-supervision-api-service/commit/2fefa27c103e98f7377e2934c6bb9f38283e9bda))
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([d2cdce8](https://www.github.com/cailloumajor/line-supervision-api-service/commit/d2cdce8baf14f3752c2d0294d62543960936b887))
+* logo path error message ([c8366c0](https://www.github.com/cailloumajor/line-supervision-api-service/commit/c8366c07a2be2c217f6addeeabbee80357bed036))
+
 ## [1.2.0](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.1.2...v1.2.0) (2021-12-16)
 
 
