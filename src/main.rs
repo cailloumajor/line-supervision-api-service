@@ -1,6 +1,14 @@
 use std::sync::Arc;
 
 use anyhow::Context;
+use async_std::sync::Mutex;
+use async_std::task;
+use futures::future::{AbortHandle, Abortable, Aborted};
+use futures::StreamExt;
+use signal_hook::consts::TERM_SIGNALS;
+use signal_hook::low_level::signal_name;
+use signal_hook_async_std::Signals;
+use tide::log;
 
 mod chart_data;
 mod config;
@@ -8,7 +16,6 @@ mod handlers;
 mod influxdb;
 mod ui_customization;
 
-use async_std::sync::Mutex;
 use chart_data::machine_state::Handler as MachineStateChart;
 use chart_data::production::Handler as ProductionChart;
 use config::Config;
@@ -22,9 +29,23 @@ pub struct AppState {
     production_chart: Arc<Mutex<ProductionChart>>,
 }
 
+async fn handle_signals(signals: Signals, abort_handle: AbortHandle) {
+    let mut signals = signals.fuse();
+    while let Some(signal) = signals.next().await {
+        let signame = signal_name(signal).unwrap_or("unknown");
+        log::info!("Received {} signal, stopping", signame);
+        abort_handle.abort();
+    }
+}
+
 #[async_std::main]
 async fn main() -> tide::Result<()> {
-    tide::log::start();
+    log::start();
+
+    let (abort_handle, abort_registration) = AbortHandle::new_pair();
+    let signals = Signals::new(TERM_SIGNALS)?;
+    let signals_handle = signals.handle();
+    let signals_task = task::spawn(handle_signals(signals, abort_handle));
 
     let config = Config::get()?;
     let logo_file = config.logo_file.clone();
@@ -51,6 +72,14 @@ async fn main() -> tide::Result<()> {
     app.at("/chart-data/production")
         .post(chart_data::production::handler);
 
-    app.listen("0.0.0.0:8080").await?;
+    let listen_future = Abortable::new(app.listen("0.0.0.0:8080"), abort_registration);
+    match listen_future.await {
+        Err(Aborted) => Ok(()),
+        Ok(listen_result) => listen_result,
+    }?;
+
+    signals_handle.close();
+    signals_task.await;
+
     Ok(())
 }
