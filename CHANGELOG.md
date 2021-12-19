@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.3.1](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.3.0...v1.3.1) (2021-12-18)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate futures to 0.3.19 ([ea8599d](https://www.github.com/cailloumajor/line-supervision-api-service/commit/ea8599d207d255f9832ae6b0f38d4bf5951beb19))
+
 ## [1.3.0](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.2.0...v1.3.0) (2021-12-18)
 
 
