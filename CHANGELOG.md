@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.3.2](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.3.1...v1.3.2) (2021-12-24)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate anyhow to 1.0.52 ([df0d9ea](https://www.github.com/cailloumajor/line-supervision-api-service/commit/df0d9ea5ef3c779fa84e224cd5e68a7c92544d2d))
+* **deps:** update rust crate signal-hook to 0.3.13 ([d4254de](https://www.github.com/cailloumajor/line-supervision-api-service/commit/d4254de3f7f604857e33734bc15705100a077ef2))
+
 ### [1.3.1](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.3.0...v1.3.1) (2021-12-18)
 
 
