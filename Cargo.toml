@@ -16,7 +16,7 @@ envconfig = "0.10.0"
 futures = "0.3.19"
 indexmap = { version = "1.7.0", features = [ "serde" ] }
 regex = "1.5.4"
-serde = { version = "1.0.132", features = [ "derive" ] }
+serde = { version = "1.0.133", features = [ "derive" ] }
 serde_json = "1.0.74"
 signal-hook = "0.3.13"
 signal-hook-async-std = "0.2.1"
