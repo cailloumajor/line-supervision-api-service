@@ -624,15 +624,15 @@ dependencies = [
 
 [[package]]
 name = "csv-async"
-version = "1.2.3"
+version = "1.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d72072931ebe0a6f5127359bd5cf3d4ab81e79616ed9d8c438db4dfa65ddbb77"
+checksum = "c19b33b32fd48f83388821bd8f534b59e1b1ffd5c6c83771d1b23abd3dac2685"
 dependencies = [
  "bstr",
  "cfg-if 1.0.0",
  "csv-core",
  "futures",
- "itoa 0.4.8",
+ "itoa 1.0.1",
  "ryu",
  "serde",
 ]
