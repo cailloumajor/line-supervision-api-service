@@ -1,6 +1,6 @@
 [package]
 name = "api_service"
-version = "1.3.4"
+version = "1.3.5"
 authors = [ "Arnaud Rocher <arnaud.roche3@gmail.com>" ]
 edition = "2021"
 

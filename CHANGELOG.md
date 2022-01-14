@@ -1,5 +1,15 @@
 # Changelog
 
+### [1.3.5](https://github.com/cailloumajor/line-supervision-api-service/compare/v1.3.4...v1.3.5) (2022-01-14)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate indexmap to 1.8.0 ([be4c735](https://github.com/cailloumajor/line-supervision-api-service/commit/be4c735e4e8174eafc4fdc9171bda735a8285ec1))
+* **deps:** update rust crate signal-hook-async-std to 0.2.2 ([40fd498](https://github.com/cailloumajor/line-supervision-api-service/commit/40fd49863fd5258488c907d21731a19346f6137c))
+* **deps:** update rust docker tag to v1.58.0 ([cd1baf6](https://github.com/cailloumajor/line-supervision-api-service/commit/cd1baf633acf4954aa46a2e5ac0a92e78a1d663f))
+* remove unnecessary code ([d1c4cbf](https://github.com/cailloumajor/line-supervision-api-service/commit/d1c4cbf6558cdcfc4b87b2ff0364233f37ec0721))
+
 ### [1.3.4](https://www.github.com/cailloumajor/line-supervision-api-service/compare/v1.3.3...v1.3.4) (2022-01-07)
 
 
