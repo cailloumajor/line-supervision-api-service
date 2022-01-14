@@ -29,8 +29,7 @@ pub struct AppState {
     production_chart: Arc<Mutex<ProductionChart>>,
 }
 
-async fn handle_signals(signals: Signals, abort_handle: AbortHandle) {
-    let mut signals = signals.fuse();
+async fn handle_signals(mut signals: Signals, abort_handle: AbortHandle) {
     while let Some(signal) = signals.next().await {
         let signame = signal_name(signal).unwrap_or("unknown");
         log::info!("Received {} signal, stopping", signame);

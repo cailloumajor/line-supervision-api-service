@@ -19,7 +19,7 @@ regex = "1.5.4"
 serde = { version = "1.0.133", features = [ "derive" ] }
 serde_json = "1.0.74"
 signal-hook = "0.3.13"
-signal-hook-async-std = "0.2.1"
+signal-hook-async-std = "0.2.2"
 tide = "0.16.0"
 toml = "0.5.8"
 url = "2.2.2"
