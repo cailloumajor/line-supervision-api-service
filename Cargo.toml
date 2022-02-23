@@ -38,4 +38,4 @@ features = [ "h1-client" ]
 assert_matches = "1.5.0"
 indoc = "1.0.4"
 insta = "1.12.0"
-test-case = "1.2.3"
+test-case = "2.0.0"
