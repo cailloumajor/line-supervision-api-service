@@ -1,4 +1,4 @@
-FROM rust:1.58.1-bullseye
+FROM rust:1.59.0-bullseye
 
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
 ARG USERNAME=vscode
