@@ -55,7 +55,7 @@ jobs:
     needs: pre_job
     if: needs.pre_job.outputs.should_skip != 'true'
     env:
-      RUSTFLAGS: -Zinstrument-coverage
+      RUSTFLAGS: -C instrument-coverage
       LLVM_PROFILE_FILE: coverage-%p-%m.profraw
     steps:
       - uses: actions/checkout@v2
