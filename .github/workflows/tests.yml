@@ -27,7 +27,7 @@ jobs:
     needs: pre_job
     if: needs.pre_job.outputs.should_skip != 'true'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Get Rust version from Dockerfile
         id: get-rust-version
         run: echo "::set-output name=RUST_VERSION::$(grep -oP 'FROM rust:\K[\d.]+' Dockerfile)"
@@ -58,7 +58,7 @@ jobs:
       RUSTFLAGS: -C instrument-coverage
       LLVM_PROFILE_FILE: coverage-%p-%m.profraw
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
