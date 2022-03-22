@@ -8,7 +8,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.56"
-async-std = { version = "1.10.0", features = [ "attributes" ] }
+async-std = { version = "1.11.0", features = [ "attributes" ] }
 async-trait = "0.1.52"
 csv-async = "1.2.4"
 dotenv = "0.15.0"
