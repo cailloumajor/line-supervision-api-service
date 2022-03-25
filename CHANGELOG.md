@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.3.8](https://github.com/cailloumajor/line-supervision-api-service/compare/v1.3.7...v1.3.8) (2022-03-25)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate async-std to 1.11.0 ([c491f1b](https://github.com/cailloumajor/line-supervision-api-service/commit/c491f1b08124b7d8a1f68a73e564015d9cf8d4ab))
+
 ### [1.3.7](https://github.com/cailloumajor/line-supervision-api-service/compare/v1.3.6...v1.3.7) (2022-03-17)
 
 
