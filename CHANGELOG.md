@@ -1,5 +1,15 @@
 # Changelog
 
+### [1.3.9](https://github.com/cailloumajor/line-supervision-api-service/compare/v1.3.8...v1.3.9) (2022-04-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency rust to v1.60.0 ([237733d](https://github.com/cailloumajor/line-supervision-api-service/commit/237733da662359f43c967dbea01af9e87e50ca96))
+* **deps:** update rust crate async-trait to 0.1.53 ([2668520](https://github.com/cailloumajor/line-supervision-api-service/commit/26685207dc8f88d6e07118710ad206fa22e16226))
+* **deps:** update rust crate indexmap to 1.8.1 ([f125ce1](https://github.com/cailloumajor/line-supervision-api-service/commit/f125ce1d503d4b6efef8d0388d3c8073ca8b0f4d))
+* **deps:** update rust crate toml to 0.5.9 ([280fcfc](https://github.com/cailloumajor/line-supervision-api-service/commit/280fcfc52832b19e4c07f1a5c62dbfee6606a986))
+
 ### [1.3.8](https://github.com/cailloumajor/line-supervision-api-service/compare/v1.3.7...v1.3.8) (2022-03-25)
 
 
