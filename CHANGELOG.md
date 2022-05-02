@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.3.10](https://github.com/cailloumajor/line-supervision-api-service/compare/v1.3.9...v1.3.10) (2022-05-02)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate anyhow to 1.0.57 ([affc977](https://github.com/cailloumajor/line-supervision-api-service/commit/affc977de621b462066b306cb83ba526d13ed1e2))
+* **deps:** update rust crate serde to 1.0.137 ([c93fd48](https://github.com/cailloumajor/line-supervision-api-service/commit/c93fd48306eba768395b77ca00415fcb164e7867))
+* **deps:** update rust crate serde_json to 1.0.80 ([b4891b5](https://github.com/cailloumajor/line-supervision-api-service/commit/b4891b5c81daa6cfb76a5192d89515928846299a))
+
 ### [1.3.9](https://github.com/cailloumajor/line-supervision-api-service/compare/v1.3.8...v1.3.9) (2022-04-20)
 
 
