@@ -36,6 +36,6 @@ features = [ "h1-client" ]
 
 [dev-dependencies]
 assert_matches = "1.5.0"
-indoc = "1.0.5"
+indoc = "1.0.6"
 insta = "1.14.0"
 test-case = "2.0.2"
