@@ -57,14 +57,23 @@ jobs:
       - name: Run unit tests
         uses: actions-rs/cargo@v1
         env:
-          RUSTFLAGS: -C instrument-coverage
+          RUSTFLAGS: -Cinstrument-coverage
           LLVM_PROFILE_FILE: coverage-%p-%m.profraw
         with:
           command: test
       - name: Generate coverage report
-        run: grcov . -s . -b ./target/debug/ --branch --ignore-not-existing --ignore "/*" -o lcov.info
+        run: |
+          grcov $(find . -name "coverage-*.profraw" -print) \
+            --binary-path ./target/debug/ \
+            --branch \
+            --ignore "/*" \
+            --ignore-not-existing \
+            --output-path lcov.info \
+            --output-type lcov \
+            --source-dir .
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          flags: unittests
           fail_ci_if_error: true
+          files: lcov.info
+          flags: unittests
