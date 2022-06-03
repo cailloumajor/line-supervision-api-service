@@ -3,4 +3,3 @@
 !Cargo.lock
 !Cargo.toml
 !src/
-!docker-healthcheck.sh
